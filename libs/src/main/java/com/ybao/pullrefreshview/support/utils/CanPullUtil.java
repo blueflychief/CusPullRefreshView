@@ -1,0 +1,156 @@
+package com.ybao.pullrefreshview.support.utils;
+
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AbsListView;
+import android.widget.ScrollView;
+
+import com.ybao.pullrefreshview.support.impl.Pullable;
+
+/**
+ * Created by ybao on 16/3/7.
+ */
+public class CanPullUtil {
+
+    public static Pullable getPullAble(View view) {
+        if (view == null) {
+            return null;
+        }
+        if (view instanceof Pullable) {
+            return (Pullable) view;
+        } else if (view instanceof AbsListView) {
+            return new AbsListViewCanPull((AbsListView) view);
+        } else if (view instanceof ScrollView || view instanceof NestedScrollView) {
+            return new ScrollViewCanPull((ViewGroup) view);
+        } else if (view instanceof WebView) {
+            return new WebViewCanPull((WebView) view);
+        } else if (view instanceof RecyclerView) {
+            return new RecyclerViewCanPull((RecyclerView) view);
+        }
+        return null;
+    }
+
+    private static class AbsListViewCanPull implements Pullable {
+        public AbsListViewCanPull(AbsListView absListView) {
+            this.absListView = absListView;
+        }
+
+        AbsListView absListView;
+
+        @Override
+        public boolean isGetTop() {
+            if (absListView.getCount() == 0) {
+                return true;
+            } else if (absListView.getFirstVisiblePosition() == 0 && absListView.getChildAt(0).getTop() >= absListView.getPaddingTop()) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean isGetBottom() {
+            int firstVisiblePosition = absListView.getFirstVisiblePosition();
+            int lastVisiblePosition = absListView.getLastVisiblePosition();
+            int count = absListView.getCount();
+            if (count == 0) {
+                return true;
+            } else if (lastVisiblePosition == (count - 1)) {
+                View view = absListView.getChildAt(lastVisiblePosition - firstVisiblePosition);
+                if (view != null && view.getBottom() <= absListView.getMeasuredHeight() - absListView.getPaddingBottom())
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    private static class ScrollViewCanPull implements Pullable {
+        public ScrollViewCanPull(ViewGroup scrollView) {
+            this.mScrollView = scrollView;
+        }
+
+        private ViewGroup mScrollView;
+
+        @Override
+        public boolean isGetTop() {
+            return mScrollView.getScrollY() <= 0;
+        }
+
+        @Override
+        public boolean isGetBottom() {
+            if (mScrollView.getChildCount() == 0) {
+                return true;
+            }
+            return mScrollView.getScrollY() >= (mScrollView.getChildAt(0).getHeight() - mScrollView.getMeasuredHeight());
+        }
+    }
+
+
+    private static class RecyclerViewCanPull implements Pullable {
+        public RecyclerViewCanPull(RecyclerView recyclerView) {
+            this.mRecyclerView = recyclerView;
+        }
+
+        private RecyclerView mRecyclerView;
+        private LinearLayoutManager mLayoutManager;
+
+        private void initLayoutManager() {
+            if (mLayoutManager == null) {
+                RecyclerView.LayoutManager layout = mRecyclerView.getLayoutManager();
+                if (layout != null && layout instanceof LinearLayoutManager) {
+                    mLayoutManager = (LinearLayoutManager) layout;
+                }
+            }
+        }
+
+        @Override
+        public boolean isGetTop() {
+            initLayoutManager();
+            if (mLayoutManager != null) {
+                if (mLayoutManager.getItemCount() == 0) {
+                    return true;
+                } else if (mLayoutManager.findFirstVisibleItemPosition() == 0 && mRecyclerView.getChildAt(0).getTop() >= mRecyclerView.getPaddingTop()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        @Override
+        public boolean isGetBottom() {
+            initLayoutManager();
+            if (mLayoutManager != null) {
+                int count = mLayoutManager.getItemCount();
+                if (count == 0) {
+                    return true;
+                } else if (mLayoutManager.findLastCompletelyVisibleItemPosition() == count - 1) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    private static class WebViewCanPull implements Pullable {
+        public WebViewCanPull(WebView webView) {
+            this.mWebView = webView;
+        }
+
+        private WebView mWebView;
+
+        @Override
+        public boolean isGetBottom() {
+            return mWebView.getScrollY() >= mWebView.getContentHeight() * mWebView.getScale() - mWebView.getMeasuredHeight();
+        }
+
+        @Override
+        public boolean isGetTop() {
+            return mWebView.getScrollY() <= 0;
+        }
+    }
+
+}
