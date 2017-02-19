@@ -13,7 +13,7 @@
         android:background="@android:color/white"/>
 
 
-    <com.ybao.pullrefreshview.simple.view.NormalFooterView
+    <com.ybao.pullrefreshview.layout.NormalFooterView
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

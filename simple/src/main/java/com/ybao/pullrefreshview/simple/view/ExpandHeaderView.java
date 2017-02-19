@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.ybao.pullrefreshview.layout.BaseHeaderView;
-import com.ybao.pullrefreshview.layout.FlingLayout;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.simple.utils.AnimUtil;
-import com.ybao.pullrefreshview.support.type.LayoutType;
+import com.ybao.pullrefreshview.utils.AnimUtil;
 
 /**
  * Created by Ybao on 2015/11/3 0003.
@@ -25,7 +23,7 @@ public class ExpandHeaderView extends BaseHeaderView {
 
     int state = NONE;
 
-    private final static int layoutType = LayoutType.LAYOUT_DRAWER;
+    private final static int layoutType = PullRefreshLayout.LAYOUT_DRAWER;
 
     public ExpandHeaderView(Context context) {
         this(context, null);
@@ -98,4 +96,6 @@ public class ExpandHeaderView extends BaseHeaderView {
         }
         return intercept;
     }
+
+
 }

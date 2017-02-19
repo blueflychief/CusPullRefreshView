@@ -3,12 +3,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/colorAccent"
     android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15.0dip"
-        android:background="@drawable/bottom_shadow"/>
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="15.0dip"-->
+    <!--android:background="@drawable/bottom_shadow"/>-->
 
     <ImageView
         android:id="@+id/tag"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/ic_pull_up"/>
+        android:src="@drawable/ic_pull_up"/>
 
     <TextView
         android:id="@+id/text"
@@ -27,11 +28,11 @@
         android:layout_marginTop="10.0dip"
         android:paddingBottom="10dp"
         android:text="加载"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/black"/>
 
     <ProgressBar
         android:id="@+id/progress"
-        style="@style/WidgetProgressBar"
+        style="@android:style/Widget.ProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -42,7 +43,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/id_load_clone"
+        android:src="@drawable/id_load_clone"
         android:visibility="invisible"/>
 
 </RelativeLayout>

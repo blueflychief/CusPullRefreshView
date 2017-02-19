@@ -25,11 +25,9 @@ import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.ybao.pullrefreshview.support.impl.Loadable;
-import com.ybao.pullrefreshview.support.type.LayoutType;
 
 
 public abstract class BaseFooterView extends RelativeLayout implements Loadable {
@@ -72,7 +70,7 @@ public abstract class BaseFooterView extends RelativeLayout implements Loadable 
     }
 
     public int getLayoutType() {
-        return LayoutType.LAYOUT_NORMAL;
+        return PullRefreshLayout.LAYOUT_NORMAL;
     }
 
     private void setState(int state) {
@@ -91,7 +89,7 @@ public abstract class BaseFooterView extends RelativeLayout implements Loadable 
     }
 
 
-    public int getType() {
+    public int getState() {
         return stateType;
     }
 
@@ -140,9 +138,9 @@ public abstract class BaseFooterView extends RelativeLayout implements Loadable 
     public boolean onScroll(float y) {
         boolean intercept = false;
         int footerLayoutType = getLayoutType();
-        if (footerLayoutType == LayoutType.LAYOUT_SCROLLER) {
+        if (footerLayoutType == PullRefreshLayout.LAYOUT_SCROLLER) {
             ViewCompat.setTranslationY(this, -getMeasuredHeight());
-        } else if (footerLayoutType == LayoutType.LAYOUT_DRAWER) {
+        } else if (footerLayoutType == PullRefreshLayout.LAYOUT_DRAWER) {
             ViewCompat.setTranslationY(this, y);
             ViewCompat.setTranslationY(pullRefreshLayout.getPullView(), 0);
             intercept = true;
@@ -190,5 +188,9 @@ public abstract class BaseFooterView extends RelativeLayout implements Loadable 
         this.onLoadListener = onRefreshListener;
     }
 
+    @Override
+    public boolean isLoading() {
+        return getState() == LOADING;
+    }
 }
 

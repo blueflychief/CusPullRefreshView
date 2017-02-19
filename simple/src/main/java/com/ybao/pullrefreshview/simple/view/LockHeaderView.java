@@ -11,11 +11,9 @@ import android.view.View;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.ybao.pullrefreshview.layout.BaseHeaderView;
-import com.ybao.pullrefreshview.layout.FlingLayout;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.simple.utils.AnimUtil;
-import com.ybao.pullrefreshview.support.type.LayoutType;
+import com.ybao.pullrefreshview.utils.AnimUtil;
 
 /**
  * Created by Ybao on 2015/11/3 0003.
@@ -30,7 +28,7 @@ public class LockHeaderView extends BaseHeaderView {
 
     int state = NONE;
 
-    int layoutType = LayoutType.LAYOUT_SCROLLER;
+    int layoutType = PullRefreshLayout.LAYOUT_SCROLLER;
 
     public LockHeaderView(Context context) {
         this(context, null);

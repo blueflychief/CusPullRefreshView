@@ -10,17 +10,20 @@ import java.util.List;
 
 
 public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> extends RecyclerView.Adapter
-        implements BaseRecyclerViewHolder.ItemClickListener, BaseRecyclerViewHolder.ItemLongClickListener {
+        implements BaseRecyclerViewHolder.ItemClickListener,
+        BaseRecyclerViewHolder.ItemLongClickListener {
     private RefreshRecyclerView mRecycleView;
     protected OnRecyclerItemClickListener<T> mOnRecyclerViewItemClickListener;
     protected OnRecyclerItemLongClickListener<T> mOnRecyclerItemLongClickListener;
 
-    private final int TYPE_CONTENT = 1; // 内容类型
-    private final int TYPE_FOOTER = 2; // 底部加载更多
-    private final int TYPE_HEADER = 3; // 头部
+    private final int TYPE_CONTENT = -1; // 内容类型
+    private final int TYPE_FOOTER = -2; // 底部加载更多
+    private final int TYPE_HEADER = -3; // 头部
+    private final int TYPE_NULL = -4; // 数据为空
     private List<Integer> mViewTypes; // 子视图类型
     protected List<T> mDataContainer;  //数据容器
     private int mPageSize = 20;  //默认分页大小
+    private boolean isDataNull = false;  //数据为空
 
 
     public RefreshAdapter(List<T> list, RefreshRecyclerView refreshView) {
@@ -46,11 +49,14 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
             vh.setItemClickListener(this);
             vh.setItemLongClickListener(this);
             return vh;
-        } else if (viewType == TYPE_HEADER && isHeaderVisible()) {
-            mRecycleView.setFullSpan(mRecycleView.getHeader());
+        } else if (viewType == TYPE_NULL) {
+            mRecycleView.setFullSpan(mRecycleView.getNullPage(),true);
+            return new BaseRecyclerViewHolder(mRecycleView.getNullPage());
+        } else if (viewType == TYPE_HEADER && mRecycleView.isHeaderVisible()) {
+            mRecycleView.setFullSpan(mRecycleView.getHeader(),false);
             return new BaseRecyclerViewHolder(mRecycleView.getHeader());
-        } else if (viewType == TYPE_FOOTER && isFooterVisible()) {
-            mRecycleView.setFullSpan(mRecycleView.getFooter());
+        } else if (viewType == TYPE_FOOTER && mRecycleView.isFooterVisible()) {
+            mRecycleView.setFullSpan(mRecycleView.getFooter(),false);
             return new BaseRecyclerViewHolder(mRecycleView.getFooter());
         }
         return null;
@@ -61,7 +67,7 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
         if (getItemCount() > 0) {
             int viewType = this.getItemViewType(position);
             if (viewType == TYPE_CONTENT || mViewTypes.contains(viewType)) {
-                int p = isHeaderVisible() ? (holder.getLayoutPosition() - 1) : holder.getLayoutPosition();
+                int p = mRecycleView.isHeaderVisible() ? (holder.getLayoutPosition() - 1) : holder.getLayoutPosition();
                 onBindHolder((VH) holder, p, mDataContainer.get(p));
             }
         }
@@ -75,10 +81,13 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
     @Override
     public int getItemCount() {
         int count = mDataContainer.size();
-        if (isHeaderVisible()) {
+        if (mRecycleView.isHeaderVisible()) {
             count += 1;
         }
-        if (isFooterVisible()) {
+        if (mRecycleView.isFooterVisible()) {
+            count += 1;
+        }
+        if (isDataNull) {
             count += 1;
         }
         return count;
@@ -91,12 +100,14 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
      */
     @Override
     public int getItemViewType(int position) {
-        if (position == 0 && isHeaderVisible()) {
+        if (position == 0 && mRecycleView.isHeaderVisible()) {
             return TYPE_HEADER;
-        } else if ((position == (getItemCount() - 1)) && isFooterVisible()) {
+        } else if ((position == (getItemCount() - 1)) && mRecycleView.isFooterVisible()) {
             return TYPE_FOOTER;
+        } else if (isDataNull) {
+            return TYPE_NULL;
         } else {
-            return getItemType(isHeaderVisible() ? (position - 1) : position);
+            return getItemType(mRecycleView.isHeaderVisible() ? (position - 1) : position);
         }
     }
 
@@ -146,14 +157,18 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
             throw new NullPointerException("the mDataContainer not allowed null!!!");
         }
         if (mRecycleView.isRefreshing()) {
-            mRecycleView.setRefreshing(false);
+            mRecycleView.stopRefresh();
         }
         if (isRefresh) {
             mDataContainer.clear();
         }
         if (newDataList != null && newDataList.size() > 0) {
             mDataContainer.addAll(newDataList);
+            isDataNull = false;
+        } else {  //增加空白显示item
+            isDataNull = true;
         }
+
         if (isRefresh) {
             notifyDataSetChanged();
         } else {
@@ -186,7 +201,7 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
         if (list == null) {
             return;
         }
-        notifyItemRangeInserted(mDataContainer.size() - list.size() + (isHeaderVisible() ? 2 : 1), list.size());
+        notifyItemRangeInserted(mDataContainer.size() - list.size() + (mRecycleView.isHeaderVisible() ? 2 : 1), list.size());
     }
 
     /**
@@ -232,11 +247,11 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
 
     /*是否是数据项*/
     public boolean isDataItem(int layoutPosition) {
-        if (isHeaderVisible()) {
+        if (mRecycleView.isHeaderVisible()) {
             if (layoutPosition == 0 || layoutPosition > mDataContainer.size()) {
                 return false;
             }
-        } else if (isFooterVisible()) {
+        } else if (mRecycleView.isFooterVisible()) {
             if (layoutPosition >= mDataContainer.size()) {
                 return false;
             }
@@ -244,19 +259,11 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
         return true;
     }
 
-    /*header是否存在或者是否显示了*/
-    public boolean isHeaderVisible() {
-        return (mRecycleView.getHeader() != null) && (mRecycleView.getHeader().getVisibility() == View.VISIBLE);
-    }
 
-    /*footer是否存在或者是否显示了*/
-    public boolean isFooterVisible() {
-        return mRecycleView.getFooter() != null && mRecycleView.getFooter().getVisibility() == View.VISIBLE;
-    }
 
     /*获取data的position*/
     public int getDataPosition(int layoutPosition) {
-        return isHeaderVisible() ? (layoutPosition - 1) : layoutPosition;
+        return mRecycleView.isHeaderVisible() ? (layoutPosition - 1) : layoutPosition;
     }
 }
 

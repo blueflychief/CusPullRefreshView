@@ -38,11 +38,13 @@ import com.ybao.pullrefreshview.support.impl.Refreshable;
  * @author Ybao
  */
 public class PullRefreshLayout extends FlingLayout {
+    public final static int LAYOUT_NORMAL = 0x00;
+    public final static int LAYOUT_DRAWER = 0x01;
+    public final static int LAYOUT_SCROLLER = 0x10;
 
-    protected Loadable mFooter;
-    protected Refreshable mHeader;
-    protected boolean hasHeader = true;
-    protected boolean hasFooter = true;
+    private Context mContext;
+    private BaseHeaderView mRefreshHeader;
+    private BaseFooterView mLoadFooter;
 
     public PullRefreshLayout(Context context) {
         this(context, null);
@@ -54,18 +56,20 @@ public class PullRefreshLayout extends FlingLayout {
 
     public PullRefreshLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
+        ;
     }
 
     @Override
     protected boolean onScroll(float y) {
-        if (mHeader != null && hasHeader && y >= 0) {
-            boolean intercept = mHeader.onScroll(y);
+        if (mRefreshHeader != null && y >= 0) {
+            boolean intercept = mRefreshHeader.onScroll(y);
             if (y != 0) {
                 return intercept;
             }
         }
-        if (mFooter != null && hasFooter && y <= 0) {
-            boolean intercept = mFooter.onScroll(y);
+        if (mLoadFooter != null && y <= 0) {
+            boolean intercept = mLoadFooter.onScroll(y);
             if (y != 0) {
                 return intercept;
             }
@@ -75,57 +79,141 @@ public class PullRefreshLayout extends FlingLayout {
 
     @Override
     protected void onScrollChange(int stateType) {
-        if (mHeader != null && hasHeader) {
-            mHeader.onScrollChange(stateType);
+        if (mRefreshHeader != null) {
+            mRefreshHeader.onScrollChange(stateType);
+            if (stateType == BaseHeaderView.REFRESHING) {
+                if (mLoadFooter != null) {
+                    // TODO: 2/19/2017  禁止上拉
+                }
+            }
         }
-        if (mFooter != null && hasFooter) {
-            mFooter.onScrollChange(stateType);
+        if (mLoadFooter != null) {
+            mLoadFooter.onScrollChange(stateType);
+            if (stateType == BaseFooterView.LOADING) {
+                if (mRefreshHeader != null) {
+                    // TODO: 2/19/2017  禁止下拉
+                }
+            }
         }
 
     }
 
     @Override
     protected boolean onStartFling(float nowY) {
-        if (mHeader != null && nowY > 0 && hasHeader) {
-            return mHeader.onStartFling(nowY);
-        } else if (mFooter != null && nowY < 0 && hasFooter) {
-            return mFooter.onStartFling(nowY);
+        if (mRefreshHeader != null && nowY > 0) {
+            return mRefreshHeader.onStartFling(nowY);
+        } else if (mLoadFooter != null && nowY < 0) {
+            return mLoadFooter.onStartFling(nowY);
         }
         return false;
     }
 
+    /*设置默认的下拉刷新头*/
+    public void setDefaultHeader() {
+        setPullHeader(new NormalHeaderView(mContext));
+    }
+
+    /*设置默认的上拉加载Footer*/
+    public void setDefaultFooter() {
+        setPullFooter(new NormalFooterView(mContext));
+    }
+
+    /*设置下拉刷新的监听*/
+    public void setOnRefreshListener(BaseHeaderView.OnRefreshListener onRefreshListener) {
+        if (onRefreshListener != null && mRefreshHeader != null) {
+            mRefreshHeader.setOnRefreshListener(onRefreshListener);
+        }
+    }
+
+    /*设置上拉加载更多的监听*/
+    public void setOnLoadListener(BaseFooterView.OnLoadListener onLoadListener) {
+        if (onLoadListener != null && mLoadFooter != null) {
+            mLoadFooter.setOnLoadListener(onLoadListener);
+        }
+    }
+
+    /*设置下拉刷新的头部*/
+    public void setPullHeader(BaseHeaderView pullHeader) {
+        if (pullHeader != null) {
+            int count = getChildCount();
+            for (int i = 0; i < count; i++) {
+                if (getChildAt(i) instanceof Refreshable) {  //移除已有的刷新Header
+                    removeViewAt(i);
+                    break;
+                }
+            }
+            mRefreshHeader = pullHeader;
+            addView(mRefreshHeader, -1, new LayoutParams(-1, -2));
+        }
+    }
+
+    /*设置上拉加载的底部*/
+    public void setPullFooter(BaseFooterView loadFooter) {
+        if (loadFooter != null) {
+            int count = getChildCount();
+            for (int i = 0; i < count; i++) {
+                if (getChildAt(i) instanceof Loadable) {  //移除已有的加载Footer
+                    removeViewAt(i);
+                    break;
+                }
+            }
+            mLoadFooter = loadFooter;
+            addView(mLoadFooter, -1, new LayoutParams(-1, -2));
+        }
+    }
+
+    /*是否正在刷新*/
+    public boolean isRefreshing() {
+        if (mRefreshHeader != null) {
+            return mRefreshHeader.isRefreshing();
+        }
+        return false;
+    }
+
+    /*是否正在加载*/
+    public boolean isloading() {
+        if (mLoadFooter != null) {
+            return mLoadFooter.isLoading();
+        }
+        return false;
+    }
+
+    /*开始下拉刷新*/
     public void startRefresh() {
-        if (mHeader != null && hasHeader) {
-            mHeader.startRefresh();
+        if (mRefreshHeader != null) {
+            mRefreshHeader.startRefresh();
         }
     }
 
-    public void startLoad() {
-        if (mFooter != null && hasFooter) {
-            mFooter.startLoad();
-        }
-    }
-
+    /*停止下拉刷新*/
     public void stopRefresh() {
-        if (mHeader != null && hasHeader) {
-            mHeader.stopRefresh();
+        if (mRefreshHeader != null) {
+            mRefreshHeader.stopRefresh();
         }
     }
 
+    /*开始加载更多*/
+    public void startLoad() {
+        if (mLoadFooter != null) {
+            mLoadFooter.startLoad();
+        }
+    }
+
+    /*停止加载更多*/
     public void stopLoad() {
-        if (mFooter != null && hasFooter) {
-            mFooter.stopLoad();
+        if (mLoadFooter != null) {
+            mLoadFooter.stopLoad();
         }
     }
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (child instanceof Refreshable && mHeader == null) {
-            mHeader = (Refreshable) child;
-            mHeader.setPullRefreshLayout(this);
-        } else if (child instanceof Loadable && mFooter == null) {
-            mFooter = (Loadable) child;
-            mFooter.setPullRefreshLayout(this);
+        if (child instanceof BaseHeaderView) {
+            mRefreshHeader = (BaseHeaderView) child;
+            mRefreshHeader.setPullRefreshLayout(this);
+        } else if (child instanceof BaseFooterView) {
+            mLoadFooter = (BaseFooterView) child;
+            mLoadFooter.setPullRefreshLayout(this);
         }
         super.addView(child, index, params);
     }
@@ -134,12 +222,12 @@ public class PullRefreshLayout extends FlingLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         int height = getHeight();
-        if (mHeader != null) {
-            View mHeaderView = (View) mHeader;
+        if (mRefreshHeader != null) {
+            View mHeaderView = mRefreshHeader;
             mHeaderView.layout(mHeaderView.getLeft(), -mHeaderView.getMeasuredHeight(), mHeaderView.getRight(), 0);
         }
-        if (mFooter != null) {
-            View mFooterView = (View) mFooter;
+        if (mLoadFooter != null) {
+            View mFooterView = mLoadFooter;
             mFooterView.layout(mFooterView.getLeft(), height, mFooterView.getRight(), height + mFooterView.getMeasuredHeight());
         }
     }

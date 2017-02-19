@@ -19,15 +19,16 @@ import com.ybao.pullrefreshview.refreshview.OnRecyclerItemClickListener;
 import com.ybao.pullrefreshview.refreshview.RefreshAdapter;
 import com.ybao.pullrefreshview.refreshview.RefreshRecyclerView;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.simple.view.NormalFooterView;
-import com.ybao.pullrefreshview.simple.view.NormalHeaderView;
+import com.ybao.pullrefreshview.layout.NormalFooterView;
+import com.ybao.pullrefreshview.layout.NormalHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RefreshRecycleriewActivity extends AppCompatActivity implements BaseHeaderView.OnRefreshListener, BaseFooterView.OnLoadListener {
-    private static final String TAG = "RefreshRecycleriewActivity";
+    private static final String TAG = "RefreshRecycleriew";
     RefreshRecyclerView mRefreshRecyclerView;
+    private MyRefreshAdapter mMyRefreshAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +36,24 @@ public class RefreshRecycleriewActivity extends AppCompatActivity implements Bas
         setContentView(R.layout.activity_refresh_recycleriew);
         mRefreshRecyclerView = (RefreshRecyclerView) findViewById(R.id.refresh_recycleriew);
 
+//
+//        NormalHeaderView refreshHeader = new NormalHeaderView(this);
+//        refreshHeader.setOnRefreshListener(this);
+//        NormalFooterView loadFooter = new NormalFooterView(this);
+//        loadFooter.setOnLoadListener(this);
+//        mRefreshRecyclerView.setPullHeader(refreshHeader);
+//        mRefreshRecyclerView.setPullFooter(loadFooter);
+
+        mRefreshRecyclerView.setDefaultFooter();
+        mRefreshRecyclerView.setDefaultHeader();
+        mRefreshRecyclerView.setOnLoadListener(this);
+        mRefreshRecyclerView.setOnRefreshListener(this);
+        mMyRefreshAdapter = new MyRefreshAdapter(getData(12), mRefreshRecyclerView);
+        mRefreshRecyclerView.setAdapter(mMyRefreshAdapter);
         LinearLayout linearLayout = initViews();
-
-        NormalHeaderView refreshHeader = new NormalHeaderView(this);
-        refreshHeader.setOnRefreshListener(this);
-        NormalFooterView loadFooter = new NormalFooterView(this);
-        loadFooter.setOnLoadListener(this);
-        mRefreshRecyclerView.setPullHeader(refreshHeader);
-        mRefreshRecyclerView.setPullFooter(loadFooter);
-
-
-        MyRefreshAdapter myRefreshAdapter = new MyRefreshAdapter(getData(12), mRefreshRecyclerView);
-        mRefreshRecyclerView.setAdapter(myRefreshAdapter);
         mRefreshRecyclerView.setHeader(linearLayout);
         mRefreshRecyclerView.setFooter(linearLayout);
-        myRefreshAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
+        mMyRefreshAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onRecyclerItemClick(int dataPosition, View view, Object data) {
                 Toast.makeText(RefreshRecycleriewActivity.this, dataPosition + "位置的：" + view.getId() + "被点击了", Toast.LENGTH_SHORT).show();
@@ -99,6 +103,7 @@ public class RefreshRecycleriewActivity extends AppCompatActivity implements Bas
             @Override
             public void run() {
                 baseHeaderView.stopRefresh();
+                mMyRefreshAdapter.addData(true, null);
             }
         }, 2000);
     }
@@ -111,6 +116,7 @@ public class RefreshRecycleriewActivity extends AppCompatActivity implements Bas
             @Override
             public void run() {
                 baseFooterView.stopLoad();
+                mMyRefreshAdapter.addData(true, getData(16));
             }
         }, 2000);
     }

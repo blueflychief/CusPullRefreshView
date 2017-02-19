@@ -25,11 +25,9 @@ import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.ybao.pullrefreshview.support.impl.Refreshable;
-import com.ybao.pullrefreshview.support.type.LayoutType;
 
 public abstract class BaseHeaderView extends RelativeLayout implements Refreshable {
 
@@ -72,7 +70,7 @@ public abstract class BaseHeaderView extends RelativeLayout implements Refreshab
     }
 
     public int getLayoutType() {
-        return LayoutType.LAYOUT_NORMAL;
+        return PullRefreshLayout.LAYOUT_NORMAL;
     }
 
 
@@ -91,7 +89,7 @@ public abstract class BaseHeaderView extends RelativeLayout implements Refreshab
         onStateChange(state);
     }
 
-    public int getType() {
+    public int getState() {
         return stateType;
     }
 
@@ -139,9 +137,9 @@ public abstract class BaseHeaderView extends RelativeLayout implements Refreshab
     public boolean onScroll(float y) {
         boolean intercept = false;
         int layoutType = getLayoutType();
-        if (layoutType == LayoutType.LAYOUT_SCROLLER) {
+        if (layoutType == PullRefreshLayout.LAYOUT_SCROLLER) {
             ViewCompat.setTranslationY(this, getMeasuredHeight());
-        } else if (layoutType == LayoutType.LAYOUT_DRAWER) {
+        } else if (layoutType == PullRefreshLayout.LAYOUT_DRAWER) {
             ViewCompat.setTranslationY(this, y);
             ViewCompat.setTranslationY(pullRefreshLayout.getPullView(), 0);
             intercept = true;
@@ -187,6 +185,11 @@ public abstract class BaseHeaderView extends RelativeLayout implements Refreshab
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
         this.onRefreshListener = onRefreshListener;
+    }
+
+    @Override
+    public boolean isRefreshing() {
+        return getState() == REFRESHING;
     }
 
 }

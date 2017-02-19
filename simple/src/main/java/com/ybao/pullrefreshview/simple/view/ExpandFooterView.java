@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.ybao.pullrefreshview.layout.BaseFooterView;
-import com.ybao.pullrefreshview.layout.FlingLayout;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.simple.utils.AnimUtil;
-import com.ybao.pullrefreshview.support.type.LayoutType;
+import com.ybao.pullrefreshview.utils.AnimUtil;
 
 /**
  * Created by Ybao on 2015/11/3 0003.
@@ -25,7 +23,7 @@ public class ExpandFooterView extends BaseFooterView {
 
     int state = NONE;
 
-    private int layoutType = LayoutType.LAYOUT_DRAWER;
+    private int layoutType = PullRefreshLayout.LAYOUT_DRAWER;
 
     public ExpandFooterView(Context context) {
         this(context, null);
@@ -98,4 +96,6 @@ public class ExpandFooterView extends BaseFooterView {
         }
         return intercept;
     }
+
+
 }
