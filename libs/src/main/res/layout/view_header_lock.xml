@@ -4,8 +4,7 @@
     android:id="@+id/load_box"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_alignParentBottom="true">
+    android:layout_height="60dp">
 
 
     <ImageView
@@ -13,7 +12,7 @@
         android:layout_width="32dip"
         android:layout_height="32dip"
         android:layout_centerInParent="true"
-        android:src="@mipmap/id_load_b"
+        android:src="@drawable/id_load_b"
         android:visibility="invisible"/>
 
     <ImageView
@@ -21,6 +20,6 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/id_load_clone_b"
+        android:src="@drawable/id_load_clone_b"
         android:visibility="invisible"/>
 </RelativeLayout>

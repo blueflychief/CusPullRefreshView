@@ -69,6 +69,9 @@
         <activity
             android:name=".activities.RefreshRecycleriewActivity"
             android:label="RefreshRecycler"/>
+        <activity
+            android:name=".activities.StrethHeaderActivity"
+            android:label="弹性头部"/>
     </application>
 
 </manifest>

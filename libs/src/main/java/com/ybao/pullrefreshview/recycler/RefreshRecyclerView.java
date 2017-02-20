@@ -1,11 +1,10 @@
-package com.ybao.pullrefreshview.refreshview;
+package com.ybao.pullrefreshview.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -24,7 +23,7 @@ public class RefreshRecyclerView extends PullRefreshLayout {
 
     private View mHeader;             // 头部
     private View mFooter;             // 脚部
-    private View mNullPage;             // 无数据页
+    private View mNullPage;           // 无数据页
 
     public RefreshRecyclerView(Context context) {
         this(context, null);
@@ -127,21 +126,14 @@ public class RefreshRecyclerView extends PullRefreshLayout {
      *
      * @param view 子视图
      */
-    public void setFullSpan(final View view, final boolean heightMatchParent) {
+    public void setFullSpan(View view) {
+        RecyclerView.LayoutManager manager = getLayoutManager();
+        if (manager instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager.LayoutParams params = new StaggeredGridLayoutManager.LayoutParams(
+                    StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT, -2);
+            params.setFullSpan(true);
+            view.setLayoutParams(params);
+        }
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-                RecyclerView.LayoutManager manager = getLayoutManager();
-                int headHeight = isHeaderVisible() ? getHeader().getMeasuredHeight() : 0;
-                int footerHeight = isHeaderVisible() ? getFooter().getMeasuredHeight() : 0;
-                if (manager instanceof StaggeredGridLayoutManager) {
-                    StaggeredGridLayoutManager.LayoutParams params = new StaggeredGridLayoutManager.LayoutParams(
-                            StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT, heightMatchParent ? getMeasuredHeight() - headHeight - footerHeight : -2);
-                    params.setFullSpan(!heightMatchParent);
-                    view.setLayoutParams(params);
-                }
-            }
-        });
     }
 }

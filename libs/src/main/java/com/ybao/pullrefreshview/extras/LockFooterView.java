@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.simple.view;
+package com.ybao.pullrefreshview.extras;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,15 +10,12 @@ import android.view.View;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import com.ybao.pullrefreshview.layout.BaseHeaderView;
+import com.ybao.pullrefreshview.R;
+import com.ybao.pullrefreshview.layout.BaseFooterView;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
-import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.utils.AnimUtil;
+import com.ybao.pullrefreshview.support.utils.AnimUtil;
 
-/**
- * Created by Ybao on 2015/11/3 0003.
- */
-public class LockHeaderView extends BaseHeaderView {
+public class LockFooterView extends BaseFooterView {
     View progress;
     View stateImg;
     View loadBox;
@@ -30,21 +27,21 @@ public class LockHeaderView extends BaseHeaderView {
 
     int layoutType = PullRefreshLayout.LAYOUT_SCROLLER;
 
-    public LockHeaderView(Context context) {
+    public LockFooterView(Context context) {
         this(context, null);
     }
 
-    public LockHeaderView(Context context, AttributeSet attrs) {
+    public LockFooterView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LockHeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LockFooterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.view_header_lock, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.view_footer_lock, this, true);
         progress = findViewById(R.id.progress);
         stateImg = findViewById(R.id.state);
         loadBox = findViewById(R.id.load_box);
@@ -56,18 +53,11 @@ public class LockHeaderView extends BaseHeaderView {
     }
 
     @Override
-    public void setPullRefreshLayout(PullRefreshLayout refreshLayout) {
-        super.setPullRefreshLayout(refreshLayout);
-        refreshLayout.setMaxDistance(400);
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, 400);
         setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY));
         width = getWidth();
     }
-
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -87,13 +77,13 @@ public class LockHeaderView extends BaseHeaderView {
                 break;
             case PULLING:
                 break;
-            case LOOSENT_O_REFRESH:
+            case LOOSENT_O_LOAD:
                 break;
-            case REFRESHING:
+            case LOADING:
                 AnimUtil.startShow(progress, 0.1f, 200, 0);
                 AnimUtil.startRotation(progress, ViewHelper.getRotation(progress) + 359.99f, 500, 0, -1);
                 break;
-            case REFRESH_CLONE:
+            case LOAD_CLONE:
                 AnimUtil.startShow(stateImg, 0.1f, 400, 200);
                 AnimUtil.startHide(progress);
                 break;
@@ -115,7 +105,7 @@ public class LockHeaderView extends BaseHeaderView {
     @Override
     public boolean onScroll(float y) {
         boolean intercept = super.onScroll(y);
-        ViewHelper.setTranslationY(loadBox, 0.97f * y - loadBox.getHeight());
+        ViewHelper.setTranslationY(loadBox, 400 + 0.97f * y);
         if (!isLockState()) {
             ViewHelper.setRotation(progress, y * y * 48 / 31250);
         }
@@ -125,9 +115,9 @@ public class LockHeaderView extends BaseHeaderView {
             return intercept;
         }
         // 贝赛尔曲线的起始点
-        path.moveTo(0, 0);
+        path.moveTo(0, 400);
         // 设置贝赛尔曲线的操作点以及终止点
-        path.quadTo(width / 2, 1.94f * y, width, 0);
+        path.quadTo(width / 2, 400 + 1.94f * y, width, 400);
         invalidate();
         return intercept;
     }

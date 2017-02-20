@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.refreshview;
+package com.ybao.pullrefreshview.recycler;
 
 import android.view.View;
 

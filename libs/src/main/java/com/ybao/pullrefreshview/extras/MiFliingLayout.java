@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.simple.view;
+package com.ybao.pullrefreshview.extras;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -7,9 +7,6 @@ import android.view.View;
 
 import com.ybao.pullrefreshview.layout.FlingLayout;
 
-/**
- * Created by Ybao on 16/7/30.
- */
 public class MiFliingLayout extends FlingLayout {
     public MiFliingLayout(Context context) {
         super(context);

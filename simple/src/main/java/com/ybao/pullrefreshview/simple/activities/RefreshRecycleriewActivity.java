@@ -14,13 +14,11 @@ import android.widget.Toast;
 
 import com.ybao.pullrefreshview.layout.BaseFooterView;
 import com.ybao.pullrefreshview.layout.BaseHeaderView;
-import com.ybao.pullrefreshview.refreshview.BaseRecyclerViewHolder;
-import com.ybao.pullrefreshview.refreshview.OnRecyclerItemClickListener;
-import com.ybao.pullrefreshview.refreshview.RefreshAdapter;
-import com.ybao.pullrefreshview.refreshview.RefreshRecyclerView;
+import com.ybao.pullrefreshview.recycler.BaseRecyclerViewHolder;
+import com.ybao.pullrefreshview.recycler.OnRecyclerItemClickListener;
+import com.ybao.pullrefreshview.recycler.RefreshAdapter;
+import com.ybao.pullrefreshview.recycler.RefreshRecyclerView;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.layout.NormalFooterView;
-import com.ybao.pullrefreshview.layout.NormalHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;

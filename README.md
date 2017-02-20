@@ -80,7 +80,7 @@ public class MiFliingLayout extends FlingLayout {
 2、再用实现好的控件套住要滑动的控件就行了。
 
 ```xml
-<com.ybao.pullrefreshview.simple.view.MiFliingLayout
+<com.ybao.pullrefreshview.extras.MiFliingLayout
  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -93,7 +93,7 @@ public class MiFliingLayout extends FlingLayout {
         android:divider="#ccc"
         android:dividerHeight="1px" />
 
-</com.ybao.pullrefreshview.simple.view.MiFliingLayout>
+</com.ybao.pullrefreshview.extras.MiFliingLayout>
 ```
 效果图：
 
@@ -172,13 +172,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <com.ybao.pullrefreshview.layout.NormalHeaderView
+    <com.ybao.pullrefreshview.extras.NormalHeaderView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 
-    <com.ybao.pullrefreshview.layout.NormalFooterView
+    <com.ybao.pullrefreshview.extras.NormalFooterView
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

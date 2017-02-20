@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.refreshview;
+package com.ybao.pullrefreshview.recycler;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -50,13 +50,13 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
             vh.setItemLongClickListener(this);
             return vh;
         } else if (viewType == TYPE_NULL) {
-            mRecycleView.setFullSpan(mRecycleView.getNullPage(),true);
+            mRecycleView.setFullSpan(mRecycleView.getNullPage());
             return new BaseRecyclerViewHolder(mRecycleView.getNullPage());
         } else if (viewType == TYPE_HEADER && mRecycleView.isHeaderVisible()) {
-            mRecycleView.setFullSpan(mRecycleView.getHeader(),false);
+            mRecycleView.setFullSpan(mRecycleView.getHeader());
             return new BaseRecyclerViewHolder(mRecycleView.getHeader());
         } else if (viewType == TYPE_FOOTER && mRecycleView.isFooterVisible()) {
-            mRecycleView.setFullSpan(mRecycleView.getFooter(),false);
+            mRecycleView.setFullSpan(mRecycleView.getFooter());
             return new BaseRecyclerViewHolder(mRecycleView.getFooter());
         }
         return null;
@@ -258,7 +258,6 @@ public abstract class RefreshAdapter<VH extends BaseRecyclerViewHolder, T> exten
         }
         return true;
     }
-
 
 
     /*获取data的position*/

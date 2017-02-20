@@ -26,6 +26,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ybao.pullrefreshview.extras.NormalFooterView;
+import com.ybao.pullrefreshview.extras.NormalHeaderView;
 import com.ybao.pullrefreshview.support.impl.Loadable;
 import com.ybao.pullrefreshview.support.impl.Refreshable;
 
@@ -34,8 +36,6 @@ import com.ybao.pullrefreshview.support.impl.Refreshable;
  * 经典下拉刷新，上拉加载的通用控件（可用于任意控件 如 ListView GridView WebView ScrollView）
  * <p>
  * 弹性下（上）拉，滑倒顶（低）部无需松开即可继续拉动
- *
- * @author Ybao
  */
 public class PullRefreshLayout extends FlingLayout {
     public final static int LAYOUT_NORMAL = 0x00;
@@ -57,7 +57,6 @@ public class PullRefreshLayout extends FlingLayout {
     public PullRefreshLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
-        ;
     }
 
     @Override
@@ -164,18 +163,12 @@ public class PullRefreshLayout extends FlingLayout {
 
     /*是否正在刷新*/
     public boolean isRefreshing() {
-        if (mRefreshHeader != null) {
-            return mRefreshHeader.isRefreshing();
-        }
-        return false;
+        return mRefreshHeader != null && mRefreshHeader.isRefreshing();
     }
 
     /*是否正在加载*/
     public boolean isloading() {
-        if (mLoadFooter != null) {
-            return mLoadFooter.isLoading();
-        }
-        return false;
+        return mLoadFooter != null && mLoadFooter.isLoading();
     }
 
     /*开始下拉刷新*/
