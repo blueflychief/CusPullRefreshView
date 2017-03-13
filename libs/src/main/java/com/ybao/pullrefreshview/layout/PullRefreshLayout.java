@@ -28,8 +28,8 @@ import android.view.ViewGroup;
 
 import com.ybao.pullrefreshview.extras.NormalFooterView;
 import com.ybao.pullrefreshview.extras.NormalHeaderView;
-import com.ybao.pullrefreshview.support.impl.Loadable;
-import com.ybao.pullrefreshview.support.impl.Refreshable;
+import com.ybao.pullrefreshview.iable.Loadable;
+import com.ybao.pullrefreshview.iable.Refreshable;
 
 
 /**
@@ -167,7 +167,7 @@ public class PullRefreshLayout extends FlingLayout {
     }
 
     /*是否正在加载*/
-    public boolean isloading() {
+    public boolean isLoading() {
         return mLoadFooter != null && mLoadFooter.isLoading();
     }
 

@@ -13,7 +13,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.ybao.pullrefreshview.R;
 import com.ybao.pullrefreshview.layout.BaseFooterView;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
-import com.ybao.pullrefreshview.support.utils.AnimUtil;
+import com.ybao.pullrefreshview.util.AnimUtil;
 
 public class LockFooterView extends BaseFooterView {
     View progress;

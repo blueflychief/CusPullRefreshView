@@ -19,11 +19,11 @@
  * <p>
  * Email：392579823@qq.com
  */
-package com.ybao.pullrefreshview.support.impl;
+package com.ybao.pullrefreshview.iable;
 
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
 
-public interface Loadable {
+public interface Refreshable {
 
     void setPullRefreshLayout(PullRefreshLayout refreshLayout);
 
@@ -33,9 +33,9 @@ public interface Loadable {
 
     boolean onStartFling(float offsetTop);
 
-    void startLoad();
+    void startRefresh();
 
-    void stopLoad();
+    void stopRefresh();
 
-    boolean isLoading();
+    boolean isRefreshing();
 }

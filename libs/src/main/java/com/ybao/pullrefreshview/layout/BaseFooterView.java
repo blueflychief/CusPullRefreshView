@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
-import com.ybao.pullrefreshview.support.impl.Loadable;
+import com.ybao.pullrefreshview.iable.Loadable;
 
 
 public abstract class BaseFooterView extends RelativeLayout implements Loadable {

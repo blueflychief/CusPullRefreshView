@@ -37,8 +37,8 @@ import android.widget.FrameLayout;
 import android.widget.Scroller;
 
 import com.nineoldandroids.view.ViewHelper;
-import com.ybao.pullrefreshview.support.impl.Pullable;
-import com.ybao.pullrefreshview.support.utils.CanPullUtil;
+import com.ybao.pullrefreshview.iable.Pullable;
+import com.ybao.pullrefreshview.util.CanPullUtil;
 
 public class FlingLayout extends FrameLayout implements NestedScrollingChild, NestedScrollingParent {
 

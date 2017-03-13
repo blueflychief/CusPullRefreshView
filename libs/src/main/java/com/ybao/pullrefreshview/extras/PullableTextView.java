@@ -6,8 +6,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.ybao.pullrefreshview.support.impl.OnScrollListener;
-import com.ybao.pullrefreshview.support.impl.Pullable;
+import com.ybao.pullrefreshview.iable.OnScrollListener;
+import com.ybao.pullrefreshview.iable.Pullable;
 
 public class PullableTextView extends TextView implements Pullable {
     private OnScrollListener onScrollListener = null;

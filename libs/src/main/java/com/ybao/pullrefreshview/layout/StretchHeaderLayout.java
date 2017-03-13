@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.ybao.pullrefreshview.support.utils.ViewScrollUtil;
+import com.ybao.pullrefreshview.util.ViewScrollUtil;
 
 /**
  * Created by lsq on 2/20/2017.

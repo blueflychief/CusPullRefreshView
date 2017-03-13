@@ -9,10 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ybao.pullrefreshview.layout.BaseFooterView;
-import com.ybao.pullrefreshview.layout.BaseHeaderView;
 import com.ybao.pullrefreshview.layout.FlingLayout;
 import com.ybao.pullrefreshview.simple.R;
-import com.ybao.pullrefreshview.support.utils.ViewScrollUtil;
+import com.ybao.pullrefreshview.util.ViewScrollUtil;
 
 import java.util.ArrayList;
 import java.util.List;

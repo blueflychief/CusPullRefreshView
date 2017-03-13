@@ -10,7 +10,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.ybao.pullrefreshview.R;
 import com.ybao.pullrefreshview.layout.BaseHeaderView;
 import com.ybao.pullrefreshview.layout.PullRefreshLayout;
-import com.ybao.pullrefreshview.support.utils.AnimUtil;
+import com.ybao.pullrefreshview.util.AnimUtil;
 
 /**
  * Created by Ybao on 2015/11/3 0003.

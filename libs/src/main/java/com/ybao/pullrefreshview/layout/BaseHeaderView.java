@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
-import com.ybao.pullrefreshview.support.impl.Refreshable;
+import com.ybao.pullrefreshview.iable.Refreshable;
 
 public abstract class BaseHeaderView extends RelativeLayout implements Refreshable {
 

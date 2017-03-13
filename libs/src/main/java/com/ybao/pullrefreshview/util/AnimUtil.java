@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.support.utils;
+package com.ybao.pullrefreshview.util;
 
 import android.view.View;
 import android.view.animation.Interpolator;

@@ -1,4 +1,4 @@
-package com.ybao.pullrefreshview.support.utils;
+package com.ybao.pullrefreshview.util;
 
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
-import com.ybao.pullrefreshview.support.impl.Pullable;
+import com.ybao.pullrefreshview.iable.Pullable;
 
 /**
  * Created by ybao on 16/3/7.
